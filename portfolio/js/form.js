@@ -11,22 +11,45 @@ if (contactForm) {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     submitBtn.disabled = true;
 
-    // Simulate API call
-    setTimeout(() => {
-      submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-      submitBtn.style.backgroundColor = "#10b981";
+    // Get form data
+    const formData = new FormData(contactForm);
 
-      // Show Netflix-style notification
-      showNotification("Your message has been sent successfully!", "success");
+    // Submit to Netlify
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    })
+      .then((response) => {
+        if (response.ok) {
+          submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+          submitBtn.style.backgroundColor = "#10b981";
 
-      // Reset form
-      setTimeout(() => {
-        contactForm.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.style.backgroundColor = "";
-        submitBtn.disabled = false;
-      }, 2000);
-    }, 1500);
+          // Show Netflix-style notification
+          showNotification("Your message has been sent successfully!", "success");
+
+          // Reset form
+          setTimeout(() => {
+            contactForm.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.backgroundColor = "";
+            submitBtn.disabled = false;
+          }, 2000);
+        } else {
+          throw new Error("Form submission failed");
+        }
+      })
+      .catch((error) => {
+        submitBtn.innerHTML = '<i class="fas fa-times"></i> Error!';
+        submitBtn.style.backgroundColor = "#e50914";
+        showNotification("Failed to send message. Please try again.", "error");
+
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+          submitBtn.style.backgroundColor = "";
+          submitBtn.disabled = false;
+        }, 2000);
+      });
   });
 }
 
