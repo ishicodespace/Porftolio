@@ -26,7 +26,10 @@ if (contactForm) {
           submitBtn.style.backgroundColor = "#10b981";
 
           // Show Netflix-style notification
-          showNotification("Your message has been sent successfully!", "success");
+          showNotification(
+            "Your message has been sent successfully!",
+            "success"
+          );
 
           // Reset form
           setTimeout(() => {

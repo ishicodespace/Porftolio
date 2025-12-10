@@ -338,6 +338,8 @@
             </div>
             <form class="contact-form" id="contactForm" name="contact" method="POST" data-netlify="true"
                 netlify-honeypot="bot-field">
+                <!-- Hidden form name field for Netlify -->
+                <input type="hidden" name="form-name" value="contact" />
                 <!-- Hidden honeypot field for spam -->
                 <div class="hidden">
                     <label>Don't fill this out if you're human: <input name="bot-field" /></label>
