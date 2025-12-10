@@ -15,12 +15,13 @@ if (contactForm) {
     const formData = new FormData(contactForm);
 
     // Submit to Netlify
-    fetch("/", {
+    fetch(contactForm.action || "/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams(formData).toString(),
     })
       .then((response) => {
+        console.log("Response status:", response.status);
         if (response.ok) {
           submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
           submitBtn.style.backgroundColor = "#10b981";
@@ -39,10 +40,12 @@ if (contactForm) {
             submitBtn.disabled = false;
           }, 2000);
         } else {
-          throw new Error("Form submission failed");
+          console.log("Response not ok:", response.statusText);
+          throw new Error("Form submission failed: " + response.status);
         }
       })
       .catch((error) => {
+        console.error("Form error:", error);
         submitBtn.innerHTML = '<i class="fas fa-times"></i> Error!';
         submitBtn.style.backgroundColor = "#e50914";
         showNotification("Failed to send message. Please try again.", "error");
